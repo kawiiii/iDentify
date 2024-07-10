@@ -1,0 +1,41 @@
+# ---- Frontend ------
+
+# Node.js dependencies
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+
+# OS-specific files
+frontend/.DS_Store
+
+# Environment variables
+frontend/.env
+
+# Vite cache
+frontend/.vite/
+
+# ----- API -------
+
+# Model files
+api/models/*.onnx
+
+# Python bytecode
+api/__pycache__/
+api/*.pyc
+
+# Logs
+*.log
+
+# ----- Jupyter Notebook checkpoints -----
+Colab Notebooks/.ipynb_checkpoints
+
+# ----- OS-specific files -----
+.DS_Store
+Thumbs.db
+
+# ----- General -------
+
+# Environment variables
+.env
+.env.local
