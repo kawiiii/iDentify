@@ -2,6 +2,7 @@
 
 ## Overview
 iDentify is a web-based application designed to facilitate the detection and classification of dental anomalies from panoramic X-rays. The tool consists of two main components: a React Vite-based front-end application and a backend system incorporating a trained YOLOv9-c model wrapped in a FastAPI container.
+
 ![Inference on Panoramic X-ray](https://www.minthilldentistry.com/wp-content/uploads/panoramic-x-ray-thegem-blog-default.jpg)
 
 ## Features
