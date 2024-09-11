@@ -1,11 +1,12 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse
 from PIL import Image
 import cv2
 from preprocessing import *
 import onnxruntime as ort
 import io
+import base64
 
 app = FastAPI()
 
@@ -36,8 +37,15 @@ async def upload_image(file: UploadFile = File(...)):
     imgBGR = process_uploaded_image(file)
     inputImg = preprocess_image_for_onnx(bgr_image=imgBGR)
     modelOutputs = onnx_model.run(["output0"], {"images": inputImg})
-    annotatedImg = detect_objects(onnx_outputs=modelOutputs, original_img=imgBGR)
+    annotatedImg, labels = detect_objects(onnx_outputs=modelOutputs, original_img=imgBGR)
     _, img_encoded = cv2.imencode('.jpeg', annotatedImg)
     img_bytes = img_encoded.tobytes()
+    img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+    
+    response_data = {
+        "image": img_base64,
+        "labels": labels
+    }
 
-    return StreamingResponse(io.BytesIO(img_bytes), media_type="image/jpeg")
+    return JSONResponse(content=response_data, media_type="application/json")
+

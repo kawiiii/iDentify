@@ -36,6 +36,9 @@ Thumbs.db
 
 # ----- General -------
 
+# Virtual environment
+venv/
+
 # Environment variables
 .env
 .env.local

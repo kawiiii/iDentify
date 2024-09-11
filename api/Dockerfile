@@ -5,8 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install system dependencies
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libjpeg-dev \
@@ -15,11 +14,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the api/ directory into the container
-COPY . /app/
+# Copy the requirements file first (enables Docker layer caching)
+COPY requirements.txt /app/
 
 # Install the Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY . /app/
 
 # Expose the port your FastAPI app is running on
 EXPOSE 8000

@@ -66,17 +66,20 @@ def detect_objects(onnx_outputs, original_img, img_shape=800, conf_threshold=0.5
 
     # Apply non-maximum suppression to remove overlapping bounding boxes
     indices = cv2.dnn.NMSBoxes(bounding_boxes, confidence_values, conf_threshold, nms_threshold)
-
+    
+    labels = []
     # Process the detected objects
     for i in indices:
         box = bounding_boxes[i]  # Access the bounding box using the index
         x1, y1, x2, y2 = box
         label = f"{class_names[class_indexes[i]].upper()} {confidence_values[i]:.2f}"  # Include confidence score
+        labels.append(class_names[class_indexes[i]])
         # Draw bounding box and label
         cv2.rectangle(original_img, (x1, y1), (x2, y2), (255, 0, 0), 2)
         cv2.putText(original_img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+        
 
-    return original_img
+    return original_img, labels
 
 
 def preprocess_image_for_onnx(bgr_image, target_shape=800):

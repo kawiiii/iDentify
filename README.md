@@ -10,7 +10,7 @@ iDentify is a web-based application designed to facilitate the detection and cla
 The frontend is built using React Vite, a modern web development framework that allows for efficient and scalable development. The application offers several functionalities, including:
 - Welcome page
 - Sign-up and login (using Firebase Authentication)
-- Dashboard for image upload, result viewing, zoom feature, and PDF export
+- Dashboard for image upload, result viewing, zoom feature, and PDF export with detailed text descriptions of detected dental anomalies
 - Feedback page for model performance feedback
 
 ### Back-End
@@ -62,16 +62,24 @@ You can access the backend at [http://0.0.0.0:8000](http://0.0.0.0:8000). Press 
 
 ### Frontend (React Vite)
    1. Clone the repository if you haven't already.
-   2. Copy the .env.example file to create a new .env file:
+   2. Navigate to the frontend directory:
+      ```sh
+      cd iDentify/frontend
+      ```
+   3. Copy the .env.example file to create a new .env file:
       ```sh
       cp .env.example .env
       ```
       Fill in the Firebase keys and any other required environment variables in the newly created .env file.
-   3. Install the dependencies:
+   4. Install the dependencies:
       ```sh
       npm install
       ```
-   4. Run the frontend development server:
+   5. Install react-modal:
+      ```sh
+      npm install react-modal
+      ```
+   6. Run the frontend development server:
       ```sh
       npm run dev
       ```
