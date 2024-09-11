@@ -43,7 +43,7 @@ const Dashboard = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", selectedFile);
-    
+
     try {
       
       const response = await fetch(import.meta.env.VITE_REACT_APP_API_URL, {
@@ -79,8 +79,7 @@ const Dashboard = () => {
 			});
 			
 			setDescription(result)      
-
-      // Do something with the imgUrl, like displaying it in an image element
+      
       document.getElementById("annotated-image").src = imgUrl;
     } catch (error) {
       console.error("Error uploading file:", error);
