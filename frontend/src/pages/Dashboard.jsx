@@ -43,94 +43,50 @@ const Dashboard = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", selectedFile);
-
+    
     try {
-      console.log("Sending request to:", import.meta.env.VITE_REACT_APP_API_URL);
+      
       const response = await fetch(import.meta.env.VITE_REACT_APP_API_URL, {
         method: "POST",
         body: formData,
       });
-    
-      console.log("Response status:", response.status);
-      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
-    
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error("Failed to upload file");
       }
-    
-      const contentType = response.headers.get("content-type");
-      console.log("Content-Type:", contentType);
-    
-      if (contentType && contentType.includes('application/json')) {
-        const responseData = await response.json();
-        console.log("Response data:", responseData);
-    
-        const { image, labels } = responseData;
-        const imgUrl = `data:image/jpeg;base64,${image}`;
-        setResponseImg(imgUrl);
-        setLabels(labels);
-        console.log("labels:", labels);
-    
-        const uniqueLabels = [...new Set(labels)];
-        const result = uniqueLabels.map(str => ({
-          label: str,
-          description: description_obj[str] || ""
-        })).filter(item => item.description !== "");
-        
-        setDescription(result);
-      } else {
-        throw new Error(`Unexpected content type: ${contentType}`);
-      }
-    
+      
+      // Parse the JSON response
+			const responseData = await response.json();
+
+			// Extract the base64 image and labels from the response
+			const { image, labels } = responseData;
+
+			// Create an image URL from the base64-encoded image
+			const imgUrl = `data:image/jpeg;base64,${image}`;
+      setResponseImg(imgUrl);
+      setLabels(labels);
+      console.log("labels;", labels)
+      const uniqueLabels = [...new Set(labels)];
+      
+      const result = [];
+      uniqueLabels.forEach(str => {
+				if (description_obj[str]) {
+					result.push({
+						label: str,
+						description: description_obj[str]
+					});
+				}
+			});
+			
+			setDescription(result)      
+
+      // Do something with the imgUrl, like displaying it in an image element
+      document.getElementById("annotated-image").src = imgUrl;
     } catch (error) {
       console.error("Error uploading file:", error);
-    } finally {
-      setLoading(false);
-    }}
-
-  //   try {
-      
-  //     const response = await fetch(import.meta.env.VITE_REACT_APP_API_URL, {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to upload file");
-  //     }
-      
-  //     // Parse the JSON response
-	// 		const responseData = await response.json();
-
-	// 		// Extract the base64 image and labels from the response
-	// 		const { image, labels } = responseData;
-
-	// 		// Create an image URL from the base64-encoded image
-	// 		const imgUrl = `data:image/jpeg;base64,${image}`;
-  //     setResponseImg(imgUrl);
-  //     setLabels(labels);
-  //     console.log("labels;", labels)
-  //     const uniqueLabels = [...new Set(labels)];
-      
-  //     const result = [];
-  //     uniqueLabels.forEach(str => {
-	// 			if (description_obj[str]) {
-	// 				result.push({
-	// 					label: str,
-	// 					description: description_obj[str]
-	// 				});
-	// 			}
-	// 		});
-			
-	// 		setDescription(result)      
-
-  //     // Do something with the imgUrl, like displaying it in an image element
-  //     document.getElementById("annotated-image").src = imgUrl;
-  //   } catch (error) {
-  //     console.error("Error uploading file:", error);
-  //   }
-  //   setLoading(false);
-  // };
+    }
+    setLoading(false);
+  };
 
   // image zoom
 
